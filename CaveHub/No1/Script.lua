@@ -1663,7 +1663,7 @@ Tabs.Settings:AddButton({
 
 local Lighting = game:GetService("Lighting")
 
-local Toggle = Tabs.Settings:AddToggle("MyToggle", {Title = "FullBright", Default = true })
+local Toggle = Tabs.Settings:AddToggle("MyToggle", {Title = "FullBright", Default = false })
 
 Toggle:OnChanged(function(Value)
 _G.FullBright = Value
