@@ -1,6 +1,4 @@
 --[[BloxFruit]]--
-
-
 local player = game:GetService("Players").LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local screenGui = Instance.new("ScreenGui")
@@ -43,14 +41,13 @@ if placeId == 2753915549 or placeId == 4442272183 or placeId == 7449423635 then
     BloxFruit = true
 end
 local placeId = game.PlaceId
-	if placeId == 2753915549 then
-		OldWorld = true
-	elseif placeId == 4442272183 then
+if placeId == 2753915549 then
+	OldWorld = true
+elseif placeId == 4442272183 then
 		NewWorld = true
-	elseif placeId == 7449423635 then
-		ThreeWorld = true
-	end
-
+elseif placeId == 7449423635 then
+	ThreeWorld = true
+end
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
@@ -95,11 +92,6 @@ _G.AutoFarm = Value
 _G.FastAttack = Value
 _G.AUTOHAKI = Value
 _G.AutoEquip = Value
-     if _G.AutoEquip then
-          while _G.AutoEquip do task.wait()
-               EquipSelectedWeapon()
-          end
-     end
 end)
 
 Options.MyToggle:SetValue(false)
@@ -111,11 +103,6 @@ _G.newworld = Value
 _G.FastAttack = Value
 _G.AUTOHAKI = Value
 _G.AutoEquip = Value
-     if _G.AutoEquip then
-          while _G.AutoEquip do task.wait()
-               EquipSelectedWeapon()
-          end
-     end
 end)
 Options.MyToggle:SetValue(false)
 
@@ -125,12 +112,6 @@ Toggle:OnChanged(function(Value)
 _G.Autosaber = Value
 _G.FastAttack = Value
 _G.AUTOHAKI = Value
-_G.AutoEquip = Value
-     if _G.AutoEquip then
-          while _G.AutoEquip do task.wait(5)
-               EquipSelectedWeapon()
-          end
-     end
 end)
 Options.MyToggle:SetValue(false)
 local Toggle = Tabs.Automatic:AddToggle("MyToggle", {Title = "AutoPole V.1", Default = false })
@@ -140,11 +121,6 @@ _G.AutoPole = Value
 _G.FastAttack = Value
 _G.AUTOHAKI = Value
 _G.AutoEquip = Value
-     if _G.AutoEquip then
-          while _G.AutoEquip do task.wait(5)
-               EquipSelectedWeapon()
-          end
-     end
 end)
 
 Options.MyToggle:SetValue(false)
@@ -179,6 +155,11 @@ end
 --------------------------------------------[[Bypass]]--------------------------------------------
 
 function Bypass(C)
+     task.wait(1)
+     local BodyClip = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip")
+     if BodyClip then
+          BodyClip:Destroy()
+     end
      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = C
      game.Players.LocalPlayer.Character.Humanoid.Health = 0
      game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("SetSpawnPoint")
@@ -199,6 +180,12 @@ function Tween(CF)
      local Distance = (CF.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
      local Speed = 350
      local tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear), { CFrame = CF })
+     tween:Play()
+end
+function FastTween(p)
+     local Distance = (p.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+     local Speed = 700
+     local tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear), { CFrame = p })
      tween:Play()
 end
 --TP(CFrame.new(0,0,0))
@@ -226,6 +213,7 @@ function chacklevel()
                QuestName = "JungleQuest"
                QuestNumber = 2
                Qusetpos = CFrame.new(-1598.08887, 35.950119, 153.377838, 0, 0, 1, 0, 1, -0, -1, 0, 0)
+               SETPOINT = CFrame.new(-1338.24963, 10.9499998, 498.668518, 0.707134247, -0, -0.707079291, 0, 1, -0, 0.707079291, 0, 0.707134247)
                ChackMon1 = CFrame.new(-1230, 53, -486)
           elseif lv == 30 or lv <= 39 then
                MonName = "Pirate"
@@ -340,14 +328,14 @@ function chacklevel()
                QuestName = "FishmanQuest"
                QuestNumber = 1
                Qusetpos = CFrame.new(61121.2695, 18.8742752, 1564.8844, -0.913477898, 0, -0.406888306, 0, 1, 0, 0.406888306, 0, -0.913477898)
-               Warp = CFrame.new(4050.31055, -1.68844795, -1814.12366, -0.215326533, 0, 0.976540387, 0, 1, 0, -0.976540387, 0, -0.215326533)
+               Warp = CFrame.new(4050.31055, -1.68844795, -1814.12366, 0.742580831, 0, -0.669752479, 0, 1, 0, 0.669752479, 0, 0.742580831)
                ChackMon1 = CFrame.new(60933, 64, 1636)
           elseif lv == 400 or lv <= 449 then
                MonName = "Fishman Commando"
                QuestName = "FishmanQuest"
                QuestNumber = 2
                Qusetpos = CFrame.new(61121.2695, 18.8742752, 1564.8844, -0.913477898, 0, -0.406888306, 0, 1, 0, 0.406888306, 0, -0.913477898)
-               Warp = CFrame.new(4050.31055, -1.68844795, -1814.12366, -0.215326533, 0, 0.976540387, 0, 1, 0, -0.976540387, 0, -0.215326533)
+               Warp = CFrame.new(4050.31055, -1.68844795, -1814.12366, 0.742580831, 0, -0.669752479, 0, 1, 0, 0.669752479, 0, 0.742580831)
                ChackMon1 = CFrame.new(61912, 72, 1475)
           elseif lv == 450 or lv <= 474 then
                MonName = "God's Guard"
@@ -452,7 +440,7 @@ spawn(function()
                          if (SETPOINT.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 2500 then
                               Tween(Qusetpos)
                          else
-                              task.wait(1.5)
+                              task.wait(.5)
                               Bypass(SETPOINT)
                          end
                          if (SETPOINT.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 100 then
@@ -472,13 +460,13 @@ spawn(function()
                                                   v.Humanoid.WalkSpeed = 0
                                                   v.Humanoid.JumpPower = 0
                                                   v.HumanoidRootPart.CanCollide = false
-                                                  v.HumanoidRootPart.Size = Vector3.new(1, 1, 1)
+                                                  v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
                                              until game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false or v.Humanoid.Health <= 0 or not _G.AutoFarm or not game.workspace.Enemies:FindFirstChild(MonName)
                                         end
                                    end
                               else
                                    wait(.5)
-                                   Tween(ChackMon1 * CFrame.new(math.random(-200, 200), 0, math.random(-200, 200)))
+                                   FastTween(ChackMon1 * CFrame.new(math.random(-200, 200), 0, math.random(-200, 200)))
                               end
                          else
                               game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("AbandonQuest")
@@ -495,7 +483,6 @@ coroutine.wrap(function()
                pcall(function()
                     chacklevel()
                     if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false then
-                         wait(1)
                          if (Warp.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 2500 then
                               task.wait(.5)
                               Tween(Warp)
@@ -520,13 +507,13 @@ coroutine.wrap(function()
                                                   v.Humanoid.WalkSpeed = 0
                                                   v.Humanoid.JumpPower = 0
                                                   v.HumanoidRootPart.CanCollide = false
-                                                  v.HumanoidRootPart.Size = Vector3.new(1, 1, 1)
+                                                  v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
                                              until game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false or v.Humanoid.Health <= 0 or not _G.AutoFarm or not game.workspace.Enemies:FindFirstChild(MonName)
                                         end
                                    end
                               else
                                    task.wait(.5)
-                                   Tween(ChackMon1 * CFrame.new(math.random(-160, 160), 0, math.random(-160, 160)))
+                                   FastTween(ChackMon1 * CFrame.new(math.random(-160, 160), 0, math.random(-160, 160)))
                               end
                          else
                               game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("AbandonQuest")
@@ -563,6 +550,7 @@ coroutine.wrap(function()
                               BodyClip:Destroy()
                          end
                     else
+                         task.wait(.5)
                          if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                               local Noclip = Instance.new("BodyVelocity")
                               Noclip.Name = "BodyClip"
@@ -643,6 +631,12 @@ coroutine.wrap(function()
                                                   y.HumanoidRootPart.CanQuery = false
                                                   v.HumanoidRootPart.CanTouch = false
                                                   y.HumanoidRootPart.CanTouch = false
+                                                  v.Humanoid.AutoRotate = false
+                                                  y.Humanoid.AutoRotate = false
+                                                  v.Humanoid.WalkSpeed = 0
+                                                  y.Humanoid.WalkSpeed = 0
+                                                  v.Humanoid.JumpPower = 0
+                                                  y.Humanoid.JumpPower = 0
                                                   if sethiddenproperty then
                                                        sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
                                                   end
@@ -650,10 +644,12 @@ coroutine.wrap(function()
                                                   BV1.MaxForce = Vector3.new(math.huge, math.huge, math.huge) -- ตั้งค่า MaxForce
                                                   BV1.Velocity = Vector3.new(0, 0, 0)
                                                   BV1.Parent = v.HumanoidRootPart
+                                                  BV1.P = 1000000
                                                   local BV2 = Instance.new("BodyVelocity")
                                                   BV2.MaxForce = Vector3.new(math.huge, math.huge, math.huge) -- ตั้งค่า MaxForce
                                                   BV2.Velocity = Vector3.new(0, 0, 0)
                                                   BV2.Parent = y.HumanoidRootPart
+                                                  BV1.P = 1000000
                                              end
                                         end
                                    end
@@ -747,27 +743,31 @@ coroutine.wrap(function()
      while true do
           if _G.FastAttack then
                pcall(function()
-                    AttackFunction()
+                    for i = 1, 1 do  -- เพิ่มจำนวนการโจมตีในลูปย่อย
+                         AttackFunction()
+                    end
                     if _G.FastAttackType == "Fast" then
-                         if tick() - cooldownfastattack < 0.0000000000000000001 then
-                         cooldownfastattack = tick()
+                         if tick() - cooldownfastattack < .1 then
+                              task.wait(.1)
+                              cooldownfastattack = tick()
                          end
                     elseif _G.FastAttackType == "Normal" then
                          if tick() - cooldownfastattack > 3 then
-                         task.wait(0.5)
-                         cooldownfastattack = tick()
+                              task.wait(0.5)
+                              cooldownfastattack = tick()
                          end
                     elseif _G.FastAttackType == "Safety" then
                          if tick() - cooldownfastattack > 0.5 then
-                         task.wait(0.3)
-                         cooldownfastattack = tick()
+                              task.wait(0.3)
+                              cooldownfastattack = tick()
                          end
                     end
                end)
           end
-          task.wait()  -- Reduce wait time to ensure fast loop execution
+          task.wait()  -- ลดเวลา wait ให้การลูปหลักทำงานเร็วขึ้น
      end
 end)()
+
 
 coroutine.wrap(function()
      while task.wait() do
@@ -780,46 +780,64 @@ coroutine.wrap(function()
 end)()
 --------------------------------------------[[SelectWeapon]]--------------------------------------------
 
-Weapon = {
+local Weapon = {
      "Melee",
      "Sword",
      "BloxFruit"
-}
+ }
+
+function UnequipWeapon()
+     local humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+     if humanoid then
+         humanoid:UnequipTools()
+
+     else
+
+     end
+end
+
+function CheckAndEquipWeapon(weaponType)
+     for _, tool in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+          if tool:IsA("Tool") and tool.ToolTip == weaponType then
+               local humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+               if humanoid then
+                    humanoid:EquipTool(tool)
+                    print("Equipped weapon:", tool.Name)
+                    return true
+               else
+
+               end
+          end
+     end
+     return false
+ end
 
 coroutine.wrap(function()
-     while wait() do
+     while task.wait(.7) do
           pcall(function()
-               if SelectWeapon == "Melee" then
-                    for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                         if v.ToolTip == "Melee" then
-                              if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-                                   _G.Settings.Configs["Select Weapon"] = v.Name
-                              end
+               if _G.AutoEquip then
+                    local foundMon = false
+                    for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                         if v.Name == MonName or NameBoss and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                              foundMon = true
+                              break
                          end
                     end
-               elseif SelectWeapon == "Sword" then
-                    for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                         if v.ToolTip == "Sword" then
-                              if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-                                   _G.Settings.Configs["Select Weapon"] = v.Name
-                              end
+                    if foundMon then
+                         -- Equip the selected weapon
+                         local weaponEquipped = false
+                         if SelectWeapon == "Melee" then
+                              weaponEquipped = CheckAndEquipWeapon("Melee")
+                         elseif SelectWeapon == "Sword" then
+                              weaponEquipped = CheckAndEquipWeapon("Sword")
+                         elseif SelectWeapon == "Fruit" then
+                              weaponEquipped = CheckAndEquipWeapon("Blox Fruit")
+                         else
+                              weaponEquipped = CheckAndEquipWeapon("Melee")
                          end
-                    end
-               elseif SelectWeapon == "Fruit" then
-                    for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                         if v.ToolTip == "Blox Fruit" then
-                              if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-                                   _G.Settings.Configs["Select Weapon"] = v.Name
-                              end
-                         end
-                    end
-               else
-                    for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                         if v.ToolTip == "Melee" then
-                              if game.Players.LocalPlayer.Backpack:FindFirstChild(tostring(v.Name)) then
-                                   _G.Settings.Configs["Select Weapon"] = v.Name
-                              end
-                         end
+                    else
+                         -- UnEquip the weapon if MonName is not found
+                         UnequipWeapon()
                     end
                end
           end)
@@ -827,41 +845,18 @@ coroutine.wrap(function()
 end)()
 
 
-
-
 local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
-     Title = "SelectWeapon",
-     Values = Weapon,
-     Multi = false,
-     Default = 1,
+    Title = "SelectWeapon",
+    Values = Weapon,
+    Multi = false,
+    Default = 1,
 })
 
 Dropdown:SetValue()
 
 Dropdown:OnChanged(function(Value)
-     SelectWeapon = Value
+    SelectWeapon = Value
 end)
-
-
-function EquipSelectedWeapon()
-     if not SelectWeapon then
-          warn("Please select a weapon.")
-          return
-     end
-     for _, tool in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-          if tool:IsA("Tool") and tool.ToolTip == SelectWeapon then
-               local humanoid = game.Players.LocalPlayer.Character and
-               game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-               if humanoid then
-                    humanoid:EquipTool(tool)
-                    print("Equipped weapon:", tool.Name)
-               else
-                    warn("Unable to find humanoid.")
-               end
-               return
-          end
-     end
-end
 --------------------------------------------[[Redeemcode]]--------------------------------------------
 
 Tabs.Main:AddButton({
@@ -904,9 +899,6 @@ Tabs.Main:AddButton({
 
 function superhuman()
      local Fragments = game:GetService("Players").LocalPlayer.Data.Fragments.Value
-     if _G.AutoSuperHuman then
-          game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("BuyBlackLeg")
-     end
      local masterydarkleg = game:GetService("Players").LocalPlayer.Backpack["Black Leg"].Level.Value
           if masterydarkleg <= 300 then
                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("BuyBlackLeg")
@@ -932,6 +924,9 @@ local Toggle = Tabs.Main:AddToggle("MyToggle", {Title = "AutoSuperHuman", Defaul
 
 Toggle:OnChanged(function(Value)
 _G.AutoSuperHuman = Value
+if Value then
+     game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("BuyBlackLeg")
+end
 end)
 Options.MyToggle:SetValue(false)
 
@@ -1137,7 +1132,7 @@ spawn(function()
 end)
 
 function pole()
-     Setpoint = CFrame.new(-7871.68555, 5544.58984, -333.27121, 0.777145445, 0, 0.629321039, 0, 1, 0, -0.629321039, 0, 0.777145445)
+     Setpoint = CFrame.new(-7894.61768, 5547.1416, -380.291199, -0.0348471925, 3.04643821e-09, 0.999392629, 1.74792461e-07, 1, 3.04643821e-09, -0.999392629, 1.74792461e-07, -0.0348471925)
      CheckMon55 = CFrame.new(-7787, 5676, -2423)
      NameBoss = "Thunder God"
 end
@@ -1150,7 +1145,7 @@ spawn(function()
                     if (CheckMon55.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 3000 then
                          Tween(CheckMon55)
                     else
-                         Bypass(Setpoint)
+                         TP(Setpoint)
                     end
                     if workspace.Enemies:FindFirstChild(NameBoss) then
                          for i, v in pairs(workspace.Enemies:GetChildren()) do
@@ -1560,6 +1555,27 @@ Tabs.Settings:AddButton({
      end
 })
 Tabs.Settings:AddButton({
+     Title = "Hop to a low server",
+     Description = "",
+     Callback = function()
+          local Http = game:GetService("HttpService")
+          local TPS = game:GetService("TeleportService")
+          local Api = "https://games.roblox.com/v1/games/"
+          local _place = game.PlaceId
+          local _servers = Api .. _place .. "/servers/Public?sortOrder=Asc&limit=100"
+          function ListServers(cursor)
+               local Raw = game:HttpGet(_servers .. ((cursor and "&cursor=" .. cursor) or ""))
+               return Http:JSONDecode(Raw)
+          end
+          local Server, Next; repeat
+               local Servers = ListServers(Next)
+               Server = Servers.data[1]
+               Next = Servers.nextPageCursor
+          until Server
+          TPS:TeleportToPlaceInstance(_place, Server.id, game.Players.LocalPlayer)
+     end
+})
+Tabs.Settings:AddButton({
      Title = "FpsBoots",
      Description = "",
      Callback = function()
@@ -1717,3 +1733,37 @@ wait(.1)
 textLabel:TweenPosition(UDim2.new(0.5, -100, 1, 0), "Out", "Quint", 1, true)
 wait(1)
 screenGui:Destroy()
+
+-------------------------------------------------[[Toggle UI]]--------------------------------------------
+
+do
+     local ToggleUI = game.CoreGui:FindFirstChild("MyToggle") 
+     if ToggleUI then
+     ToggleUI:Destroy()
+     end
+end
+
+local MyToggle = Instance.new("ScreenGui")
+local ImageButton = Instance.new("ImageButton")
+local UICorner = Instance.new("UICorner")
+
+--Properties:
+
+MyToggle.Name = "MyToggle"
+MyToggle.Parent = game.CoreGui
+MyToggle.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+ImageButton.Parent = MyToggle
+ImageButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ImageButton.BorderSizePixel = 0
+ImageButton.Position = UDim2.new(0.156000003, 0, -0, 0)
+ImageButton.Size = UDim2.new(0, 50, 0, 50)
+ImageButton.Image = "rbxassetid://17156242075"
+ImageButton.MouseButton1Click:Connect(function()
+game.CoreGui:FindFirstChild("ScreenGui").Enabled = not game.CoreGui:FindFirstChild("ScreenGui").Enabled
+end)
+
+
+UICorner.CornerRadius = UDim.new(0, 10)
+UICorner.Parent = ImageButton
