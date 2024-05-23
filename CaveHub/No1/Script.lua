@@ -96,7 +96,8 @@ end)
 
 Options.MyToggle:SetValue(false)
 
-local section = Tabs.Automatic:AddSection("AutoNewWorld")
+if OldWorld then
+local section = Tabs.Automatic:AddSection("EastBlue")
 local Toggle = Tabs.Automatic:AddToggle("MyToggle", {Title = "AutoDressrosa", Default = false })
 Toggle:OnChanged(function(Value)
 _G.newworld = Value
@@ -106,14 +107,7 @@ _G.AutoEquip = Value
 end)
 Options.MyToggle:SetValue(false)
 
-local section = Tabs.Automatic:AddSection("Sword")
-local Toggle = Tabs.Automatic:AddToggle("MyToggle", {Title = "Autosaber", Default = false })
-Toggle:OnChanged(function(Value)
-_G.Autosaber = Value
-_G.FastAttack = Value
-_G.AUTOHAKI = Value
-end)
-Options.MyToggle:SetValue(false)
+local section = Tabs.Automatic:AddSection("")
 local Toggle = Tabs.Automatic:AddToggle("MyToggle", {Title = "AutoPole V.1", Default = false })
 
 Toggle:OnChanged(function(Value)
@@ -124,7 +118,19 @@ _G.AutoEquip = Value
 end)
 
 Options.MyToggle:SetValue(false)
-
+elseif NewWorld then
+     local section = Tabs.Automatic:AddSection("Dressrosa")
+     local Toggle = Tabs.Automatic:AddToggle("MyToggle", {Title = "AutoQuestBartilo", Default = false })
+     Toggle:OnChanged(function(Value)
+     _G.AutoQuestBartilo = Value
+     end)
+     Options.MyToggle:SetValue(false)
+     local Toggle = Tabs.Automatic:AddToggle("MyToggle", {Title = "AutoFactory", Default = false })
+     Toggle:OnChanged(function(Value)
+     _G.AutoFactory = Value
+     end)
+     Options.MyToggle:SetValue(false)
+end
 --------------------------------------------[[Click]]--------------------------------------------
 
 function Click()
@@ -155,11 +161,13 @@ end
 --------------------------------------------[[Bypass]]--------------------------------------------
 
 function Bypass(C)
-     task.wait(1)
+     if game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame == C then
      local BodyClip = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip")
      if BodyClip then
           BodyClip:Destroy()
      end
+end
+     task.wait(1)
      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = C
      game.Players.LocalPlayer.Character.Humanoid.Health = 0
      game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("SetSpawnPoint")
@@ -167,24 +175,15 @@ end
 
 --------------------------------------------[[Tween]]--------------------------------------------
 
-local currentTween
-
-function Tw(CF)
-     local Distance = (CF.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-     local Speed = 350
-     currentTween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear), { CFrame = CF })
-     currentTween:Play()
-     currentTween.Completed:Wait()
-end
 function Tween(CF)
      local Distance = (CF.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-     local Speed = 350
+     local Speed = 250
      local tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear), { CFrame = CF })
      tween:Play()
 end
 function FastTween(p)
      local Distance = (p.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-     local Speed = 700
+     local Speed = 370
      local tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear), { CFrame = p })
      tween:Play()
 end
@@ -780,16 +779,18 @@ coroutine.wrap(function()
 end)()
 --------------------------------------------[[SelectWeapon]]--------------------------------------------
 
+local EquipDistance = 55 -- ระยะห่างที่ต้องการตรวจสอบ
+
 local Weapon = {
-     "Melee",
-     "Sword",
-     "BloxFruit"
- }
+    "Melee",
+    "Sword",
+    "BloxFruit"
+}
 
 function UnequipWeapon()
      local humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
      if humanoid then
-         humanoid:UnequipTools()
+          humanoid:UnequipTools()
 
      else
 
@@ -802,38 +803,46 @@ function CheckAndEquipWeapon(weaponType)
                local humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
                if humanoid then
                     humanoid:EquipTool(tool)
-                    print("Equipped weapon:", tool.Name)
                     return true
                else
 
                end
           end
      end
-     return false
- end
+    return false
+end
 
 coroutine.wrap(function()
-     while task.wait(.7) do
+     while task.wait() do
           pcall(function()
                if _G.AutoEquip then
+                    local player = game.Players.LocalPlayer
+                    local playerPosition = player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character.HumanoidRootPart.Position
                     local foundMon = false
-                    for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                         if v.Name == MonName or NameBoss and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+
+                    for _, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                         if (v.Name == MonName or v.Name == MonQuestName or v.Name == NameBoss or v.Name == QuestMonName) and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                         local enemyPosition = v:FindFirstChild("HumanoidRootPart") and v.HumanoidRootPart.Position
+                         if enemyPosition and playerPosition and (playerPosition - enemyPosition).Magnitude <= EquipDistance then
                               foundMon = true
                               break
                          end
+                         end
                     end
+
                     if foundMon then
                          -- Equip the selected weapon
                          local weaponEquipped = false
                          if SelectWeapon == "Melee" then
-                              weaponEquipped = CheckAndEquipWeapon("Melee")
+                         weaponEquipped = CheckAndEquipWeapon("Melee")
                          elseif SelectWeapon == "Sword" then
-                              weaponEquipped = CheckAndEquipWeapon("Sword")
+                         weaponEquipped = CheckAndEquipWeapon("Sword")
                          elseif SelectWeapon == "Fruit" then
-                              weaponEquipped = CheckAndEquipWeapon("Blox Fruit")
+                         weaponEquipped = CheckAndEquipWeapon("Blox Fruit")
                          else
-                              weaponEquipped = CheckAndEquipWeapon("Melee")
+                         weaponEquipped = CheckAndEquipWeapon("Melee")
+                         end
+                         if not weaponEquipped then
                          end
                     else
                          -- UnEquip the weapon if MonName is not found
@@ -843,7 +852,6 @@ coroutine.wrap(function()
           end)
      end
 end)()
-
 
 local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
     Title = "SelectWeapon",
@@ -857,6 +865,7 @@ Dropdown:SetValue()
 Dropdown:OnChanged(function(Value)
     SelectWeapon = Value
 end)
+
 --------------------------------------------[[Redeemcode]]--------------------------------------------
 
 Tabs.Main:AddButton({
@@ -970,7 +979,7 @@ spawn(function()
                          Tween(Doorpos)
                     end
                     if game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Key") then
-                         task.wait(11)
+                         task.wait(13)
                          EquipItem("Key")
                     elseif not game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Key") or game.workspace.Map.Ice.Door.Transparency == 0 then
                          Tween(Monpos)
@@ -994,139 +1003,6 @@ spawn(function()
                     wait(3)
                     game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("DressrosaQuestProgress", "Dressrosa")
                end
-          end
-     end
-end)
---------------------------------------------[[AutoSaber]]--------------------------------------------
-
-
-function saber()
-     pate1 = CFrame.new(-1180.94568, 21.0006981, 187.77478, -0.866141438, -2.23321149e-05, -0.499799222, 2.23321149e-05, 1, -8.33832528e-05, 0.499799222, -8.33832528e-05, -0.866141438)
-     pate2 = CFrame.new(-1421.19995, 44.4000244, 21.6000061, -0.866039991, -0.499974549, -5.5283308e-06, -5.5283308e-06, 2.06232071e-05, -0.99999994, 0.499974549, -0.866040051, -2.06232071e-05)
-     pate3 = CFrame.new(-1648.49451, 19.4000244, 437.794678, -0.190788865, -0.981631041, 4.50909138e-05, 4.50909138e-05, -5.47170639e-05, -1, 0.981631041, -0.190788865, 5.47170639e-05)
-     pate4 = CFrame.new(-1324.03723, 31.456028, -461.327515, 0.766120374, 2.95190748e-05, 0.642697096, 2.95190748e-05, 1, -8.11179052e-05, -0.642697096, 8.11179052e-05, 0.766120374)
-     pate5 = CFrame.new(-1152.16406, -1.30943775, -700.421265, -0.0972136259, -0.995231032, 0.00807273388, 0.102956504, -0.0181238651, -0.994520903, 0.989924192, -0.0958496034, 0.104227126)
-     Torch = CFrame.new(-1610.854, 12.0520582, 162.70369, -0.895931423, 4.10501499e-09, -0.44419241, 2.87013382e-11, 1, 9.1836343e-09, 0.44419241, 8.21515744e-09, -0.895931423)
-     Grass = CFrame.new(1114.33801, 4.92146635, 4349.36182, -0.651465237, -1.81898674e-08, 0.758678496, 5.23706518e-08, 1, 6.89455746e-08, -0.758678496, 8.46481356e-08, -0.651465237)
-     Glass = CFrame.new(1115, 8, 4367)
-     Water = CFrame.new(1397.75806, 37.3480148, -1320.78638, -0.0987103954, 4.03486737e-08, 0.995116174, 3.81928444e-09, 1, -4.01678406e-08, -0.995116174, -1.6435156e-10, -0.0987103954)
-     QuestProgress1 = CFrame.new(1461.41528, 86.399147, -1390.46472, 0.016795218, 0.25883919, 0.965774477, -0.00448916852, 0.965920448, -0.258800268, -0.999848902, 1.11162663e-05, 0.0173848271)
-     QuestProgress2 = CFrame.new(-906.697693, 13.0000076, 4077.74268, 0.0175017118, 0, 0.999846935, 0, 1, 0, -0.999846935, 0, 0.0175017118)
-     MonQuestName = "Mob Leader"
-     IslandCFrame = CFrame.new(-2872, 67, 5425)
-     FinalDoor = CFrame.new(-1408.1449, 29.8519974, 5.36743498, 0.881935418, 2.29809963e-10, 0.47137028, -2.58460559e-10, 1, -3.95535688e-12, -0.47137028, -1.18342267e-10, 0.881935418)
-     BossQuestName = "Saber Expert"
-end
-
-function travelToPoints(points)
-     for _, point in ipairs(points) do
-          if not _G.Autosaber then
-               if currentTween then
-                    currentTween:Cancel()
-               end
-               break
-          end
-          if (point.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 10000 then
-               Tw(point)
-          else
-               Tw(point)
-          end
-          if point == Grass then
-               task.wait(6)
-          elseif point == Glass then
-               task.wait(4)
-          elseif point == Water then
-               task.wait(5)
-          elseif point == QuestProgress1 then
-               task.wait(5)
-          elseif point == QuestProgress2 then
-               task.wait(5)
-          elseif point == IslandCFrame then
-               task.wait(20)
-          else
-               task.wait(.5)
-          end
-     end
-end
-
-spawn(function()
-     while task.wait() do
-          if _G.Autosaber then
-               pcall(function()
-                    saber()
-                    if game:GetService("Players").LocalPlayer.Data.Level.Value >= 200 then
-                         travelToPoints({pate1, pate2, pate3, pate4, pate5, Torch, Grass, Glass, Water, QuestProgress1, QuestProgress2, IslandCFrame, QuestProgress2, FinalDoor})
-                         if (QuestProgress1.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 10 then
-                              Click()
-                              local args = {
-                                   [1] = "ProQuestProgress",
-                                   [2] = "SickMan"
-                              }
-                              game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer(unpack(args))
-                         end
-                         if (QuestProgress2.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 10 then
-                              Click()
-                              local args = {
-                                   [1] = "ProQuestProgress",
-                                   [2] = "RichSon"
-                              }
-                              game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer(unpack(args))
-                         end
-                    end
-               end)
-          else
-               if currentTween then
-                    currentTween:Cancel()
-               end
-          end
-     end
-end)
-spawn(function()
-     while task.wait() do
-          if _G.Autosaber then
-               pcall(function()
-                    if game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Torch") then
-                         EquipItem("Torch")
-                    end
-                    if game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Cup") then
-                         EquipItem("Cup")
-                    end
-                    if game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Cup") then
-                         EquipItem("Relic")
-                    end
-               end)
-          end
-     end
-end)
-spawn(function()
-     while task.wait() do
-          if _G.Autosaber then
-               pcall(function()
-                    saber()
-                    if Workspace.Map.Jungle.QuestPlates.Door.CanCollide == false then
-                         if game.Workspace.Map.Desert.Burn.Part.CanCollide == false then
-                              if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ProQuestProgress","SickMan") == 0 then
-                                   if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ProQuestProgress","RichSon") == 0 then
-                                        if game.Workspace.Enemies:FindFirstChild(MonQuestName) then
-                                             for i,v in pairs(game.Workspace.Enemies:GetChildren()) do
-                                                  if _G.Autosaber and v:IsA("Model") and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and v.Name == "Mob Leader [Lv. 120] [Boss]" then
-                                                       repeat task.wait()
-                                                            Tween(v.HumanoidRootPart.CFrame * CFrame.new(0, 50, 0))
-                                                            v.Humanoid.WalkSpeed = 0
-                                                            v.Humanoid.JumpPower = 0
-                                                            v.HumanoidRootPart.CanCollide = false
-                                                            v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                                       until not _G.Autosaber or not v.Parent or v.Humanoid.Health <= 0
-                                                  end
-                                             end
-                                        else
-                                             Tween(IslandCFrame)
-                                        end
-                                   end
-                              end
-                         end
-                    end
-               end)
           end
      end
 end)
@@ -1543,6 +1419,45 @@ local section = Tabs.Misc:AddSection("Island Teleport")
      end)
      Options.MyToggle:SetValue(false)
 end
+--------------------------------------------[[AutoFactory]]--------------------------------------------
+
+function Factory()
+     spawnpoint = CFrame.new(-379.871765, 72.0878448, 250.478149, -0.999848366, 0, -0.017436387, 0, 1, 0, 0.017436387, 0, -0.999848366)
+     Pak = CFrame.new(282, 74, -282)
+     NameMon = "Core"
+end
+
+spawn(function()
+     while task.wait() do
+          if _G.AutoFactory then
+               pcall(function()
+                    Factory()
+                    if (spawnpoint.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 2500 then
+                         Tween(spawnpoint)
+                    else
+                         Bypass(Pak)
+                    end
+                    if game.Workspace.Enemies:FindFirstChild("Core") then
+                         for i,v in pairs(game.Workspace.Enemies:GetChildren()) do
+                              if v.Name == "Core" and v.Humanoid.Health > 0 then
+                                   repeat task.wait()
+                                        Tween(v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 0))
+                                        v.Humanoid.WalkSpeed = 0
+                                        v.Humanoid.JumpPower = 0
+                                        v.HumanoidRootPart.CanCollide = false
+                                        v.HumanoidRootPart.Size = Vector3.new(1, 1, 1)
+                                   until not _G.Factory or game.workspace.Map.Dressrosa.SmileFactory.Door.Transparency == 0
+                              end
+                         end
+                    end
+                    if game.workspace.Map.Dressrosa.SmileFactory.Door.Transparency == 0 then
+                         Tween(Pak)
+                    end
+               end)
+          end
+     end
+end)
+
 --------------------------------------------[[Setting]]--------------------------------------------
 Tabs.Settings:AddButton({
      Title = "Rejoin",
