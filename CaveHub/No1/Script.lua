@@ -53,7 +53,7 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
 local Window = Fluent:CreateWindow({
-     Title = "N1 Hub",
+     Title = "Cave Hub",
      SubTitle = "by dawid",
      TabWidth = 180,
      Size = UDim2.fromOffset(500, 320),
@@ -226,12 +226,12 @@ end
 
 function Bypass(C)
      _G.WARP = true
-     repeat task.wait()
+     repeat wait(.5)
           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = C
           game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("SetSpawnPoint")
           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = C
           game.Players.LocalPlayer.Character.Humanoid.Health = 0
-     until game.Players.LocalPlayer.Character.Humanoid.Health > 0 or _G.AutoFarm == false
+     until game.Players.LocalPlayer.Character.Humanoid.Health > 1 or _G.AutoFarm == false
      _G.WARP = false
 end
 spawn(function()
