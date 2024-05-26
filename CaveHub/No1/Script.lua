@@ -82,8 +82,7 @@ local Options = Fluent.Options
 do
      Fluent:Notify({
           Title = "Notification",
-          Content = "This is a notification",
-          SubContent = "SubContent", -- Optional
+          Content = "YOYO",
           Duration = 5               -- Set to nil to make the notification not disappear
      })
 end
@@ -226,12 +225,12 @@ end
 
 function Bypass(C)
      _G.WARP = true
-     repeat wait(.5)
+     repeat wait(5)
           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = C
           game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("SetSpawnPoint")
           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = C
           game.Players.LocalPlayer.Character.Humanoid.Health = 0
-     until game.Players.LocalPlayer.Character.Humanoid.Health > 1 or _G.AutoFarm == false
+     until game.Players.LocalPlayer.Character.Humanoid.Health > 1 or _G.AutoFarm == false or (Vector3.new(Qusetpos)-game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 500
      _G.WARP = false
 end
 spawn(function()
