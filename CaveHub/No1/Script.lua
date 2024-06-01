@@ -54,7 +54,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
      Title = "Cave Hub",
-     SubTitle = "by dawid",
+     SubTitle = "Bypass Fix",
      TabWidth = 180,
      Size = UDim2.fromOffset(500, 320),
      Acrylic = false,                        -- The blur may be detectable, setting this to false disables blur entirely
@@ -224,24 +224,11 @@ end
 --------------------------------------------[[Bypass]]--------------------------------------------
 
 function Bypass(C)
-     _G.WARP = true
-     repeat wait(5)
-          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = C
-          game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("SetSpawnPoint")
-          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = C
-          game.Players.LocalPlayer.Character.Humanoid.Health = 0
-     until game.Players.LocalPlayer.Character.Humanoid.Health > 1 or _G.AutoFarm == false or (Vector3.new(Qusetpos)-game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 500
-     _G.WARP = false
+     task.wait(1)
+     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = C
+     game.Players.LocalPlayer.Character.Humanoid.Health = 0
+     game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_"):InvokeServer("SetSpawnPoint")
 end
-spawn(function()
-     while task.wait() do
-          if _G.WARP then
-             game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
-          else
-              game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
-          end
-      end
-end)
 --------------------------------------------[[Tween]]--------------------------------------------
 
 function Tween(CF)
@@ -401,14 +388,14 @@ function chacklevel()
                QuestName = "FishmanQuest"
                QuestNumber = 1
                Qusetpos = CFrame.new(61121.2695, 18.8742752, 1564.8844, -0.913477898, 0, -0.406888306, 0, 1, 0, 0.406888306, 0, -0.913477898)
-               Warp = CFrame.new(4050.31055, -1.68844795, -1814.12366, 0.742580831, 0, -0.669752479, 0, 1, 0, 0.669752479, 0, 0.742580831)
+               Warp = CFrame.new(4050, -2.3, -1814)
                ChackMon1 = CFrame.new(60933, 64, 1636)
           elseif lv == 400 or lv <= 449 then
                MonName = "Fishman Commando"
                QuestName = "FishmanQuest"
                QuestNumber = 2
                Qusetpos = CFrame.new(61121.2695, 18.8742752, 1564.8844, -0.913477898, 0, -0.406888306, 0, 1, 0, 0.406888306, 0, -0.913477898)
-               Warp = CFrame.new(4050.31055, -1.68844795, -1814.12366, 0.742580831, 0, -0.669752479, 0, 1, 0, 0.669752479, 0, 0.742580831)
+               Warp = CFrame.new(4050, -2.3, -1814)
                ChackMon1 = CFrame.new(61912, 72, 1475)
           elseif lv == 450 or lv <= 474 then
                MonName = "God's Guard"
@@ -560,7 +547,7 @@ coroutine.wrap(function()
                          elseif (Qusetpos.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 1500 then
                               FastTween(Qusetpos)
                          else
-                              task.wait(5)
+                              task.wait(2)
                               FastTween(Warp)
                          end
                          if (Qusetpos.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 1 then
@@ -624,9 +611,10 @@ coroutine.wrap(function()
                               local Noclip = Instance.new("BodyVelocity")
                               Noclip.Name = "BodyClip"
                               Noclip.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-                              Noclip.MaxForce = Vector3.new(10000000,10000000,10000000)
+                              Noclip.MaxForce = Vector3.new(math.huge* math.huge, math.huge * math.huge, math.huge * math.huge)
                               Noclip.Velocity = Vector3.new(0,0,0)
-                              Noclip.P = 100000
+                              Noclip.P = math.huge * math.huge
+                              Noclip.D = math.huge * math.huge
                          end
                     end
                else
@@ -664,52 +652,46 @@ coroutine.wrap(function()
                     pcall(function()
                          for _, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                               if v.Name == MonName then
-                              local otherPlayersNearby = false
-                              for _, player in pairs(game.Players:GetPlayers()) do
-                                   if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                                        local distance = (player.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                                        if distance < 680 then
-                                             otherPlayersNearby = true
-                                             break
-                                        end
-                                   end
-                              end
-                              if not otherPlayersNearby then
-                                   local distanceToMon = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                                        if distanceToMon <= 550 then
-                                             for _, y in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                                                  if y.Name == MonName then
-                                                       y.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
-                                                       v.HumanoidRootPart.CFrame = y.HumanoidRootPart.CFrame
-                                                       y.HumanoidRootPart.Size = Vector3.new(math.huge, math.huge, math.huge)
-                                                       v.HumanoidRootPart.Size = Vector3.new(math.huge, math.huge, math.huge)
-                                                       y.HumanoidRootPart.CanCollide = false
-                                                       v.HumanoidRootPart.CanCollide = false
-                                                       y.Humanoid.WalkSpeed = 0
-                                                       v.Humanoid.WalkSpeed = 0
-                                                       y.Humanoid.JumpPower = 0
-                                                       v.Humanoid.JumpPower = 0
-                                                       y.Humanoid.AutoRotate = false
-                                                       v.Humanoid.AutoRotate = false
-                                                       local BP = Instance.new("BodyPosition")
-                                                       BP.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-                                                       BP.P = math.huge * math.huge
-                                                       BP.D = math.huge * math.huge
-                                                       y.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-                                                       v.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-                                                       local BG_v = Instance.new("BodyGyro")
-                                                       BG_v.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
-                                                       BG_v.P = math.huge * math.huge
-                                                       BG_v.D = math.huge * math.huge
-                                                       y.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-                                                       v.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-                                                       if sethiddenproperty then
-                                                            sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
-                                                       end
+                                   local otherPlayersNearby = false
+                                        for _, player in pairs(game.Players:GetPlayers()) do
+                                             if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                                                  local distance = (player.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                                                  if distance < 650 then
+                                                       otherPlayersNearby = true
+                                                       break
                                                   end
                                              end
-                                        elseif distanceToMon >= 550 then
-                                             break
+                                        end
+                                        if not otherPlayersNearby then
+                                             for _, y in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                                                  if y.Name == MonName then
+                                                  y.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
+                                                  y.HumanoidRootPart.Size = Vector3.new(math.huge * math.huge, math.huge * math.huge, math.huge * math.huge)
+                                                  v.HumanoidRootPart.Size = Vector3.new(math.huge * math.huge, math.huge * math.huge, math.huge * math.huge)
+                                                  y.HumanoidRootPart.CanCollide = false
+                                                  v.HumanoidRootPart.CanCollide = false
+                                                  y.Humanoid.WalkSpeed = 0
+                                                  v.Humanoid.WalkSpeed = 0
+                                                  y.Humanoid.JumpPower = 0
+                                                  v.Humanoid.JumpPower = 0
+                                                  y.Humanoid.AutoRotate = false
+                                                  v.Humanoid.AutoRotate = false
+                                                  local BP = Instance.new("BodyPosition")
+                                                  BP.MaxForce = Vector3.new(math.huge * math.huge, math.huge * math.huge, math.huge * math.huge)
+                                                  BP.P = math.huge * math.huge
+                                                  BP.D = math.huge * math.huge
+                                                  y.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+                                                  v.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+                                                  local BG_v = Instance.new("BodyGyro")
+                                                  BG_v.MaxTorque = Vector3.new(math.huge * math.huge, math.huge * math.huge, math.huge * math.huge)
+                                                  BG_v.P = math.huge * math.huge
+                                                  BG_v.D = math.huge * math.huge
+                                                  y.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+                                                  v.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+                                                  if sethiddenproperty then
+                                                       sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                                                  end
+                                             end
                                         end
                                    end
                               end
@@ -765,7 +747,7 @@ coroutine.wrap(function()
 end)()
 --------------------------------------------[[FastAttack]]--------------------------------------------
 
-_G.FastAttackType = "Fast"
+_G.FastAttackType = "Normal"
 
 local CombatFramework = require(game:GetService("Players").LocalPlayer.PlayerScripts:WaitForChild("CombatFramework"))
 local CombatFrameworkR = getupvalues(CombatFramework)[2]
@@ -826,7 +808,7 @@ function AttackFunction()
 end
 
 coroutine.wrap(function()
-     while true do
+     while task.wait() do
           if _G.FastAttack then
                pcall(function()
                     for i = 1, 1 do  -- เพิ่มจำนวนการโจมตีในลูปย่อย
@@ -834,26 +816,28 @@ coroutine.wrap(function()
                     end
                     if _G.FastAttackType == "Fast" then
                          if tick() - cooldownfastattack < task.wait() then
-                              task.wait()
                               cooldownfastattack = tick()
                          end
                     elseif _G.FastAttackType == "Normal" then
-                         if tick() - cooldownfastattack > 3 then
-                              task.wait(0.5)
+                         if tick() - cooldownfastattack > 1.5 then
+                              task.wait(1)
                               cooldownfastattack = tick()
                          end
                     elseif _G.FastAttackType == "Safety" then
-                         if tick() - cooldownfastattack > 0.5 then
-                              task.wait(0.3)
+                         if tick() - cooldownfastattack > 0.3 then
+                              task.wait(0.5)
                               cooldownfastattack = tick()
                          end
                     end
                end)
           end
-          task.wait()  -- ลดเวลา wait ให้การลูปหลักทำงานเร็วขึ้น
      end
 end)()
-
+game:GetService("RunService").RenderStepped:Connect(function()
+     if _G.FastAttack then
+          AttackFunction()
+     end
+end)
 
 coroutine.wrap(function()
      while task.wait() do
@@ -880,9 +864,9 @@ function UnequipWeapon()
      end
 end
 
-function CheckAndEquipWeapon(weaponType)
+function CheckAndEquipWeapon(W)
      for _, tool in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-          if tool:IsA("Tool") and tool.ToolTip == weaponType then
+          if tool:IsA("Tool") and tool.ToolTip == W then
                local humanoid = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
                if humanoid then
                     humanoid:EquipTool(tool)
@@ -894,7 +878,7 @@ function CheckAndEquipWeapon(weaponType)
 end
 
 coroutine.wrap(function()
-     while task.wait(.2) do
+     while task.wait(.1) do
           pcall(function()
                if _G.AutoEquip then
                     local player = game.Players.LocalPlayer
@@ -916,7 +900,7 @@ coroutine.wrap(function()
                          weaponEquipped = CheckAndEquipWeapon("Melee")
                          elseif SelectWeapon == "Sword" then
                          weaponEquipped = CheckAndEquipWeapon("Sword")
-                         elseif SelectWeapon == "Fruit" then
+                         elseif SelectWeapon == "Blox Fruit" then
                          weaponEquipped = CheckAndEquipWeapon("Blox Fruit")
                          else
                          weaponEquipped = CheckAndEquipWeapon("Melee")
@@ -1215,7 +1199,7 @@ spawn(function()
                                         end
                                    end
                               elseif not workspace.Enemies:FindFirstChild("Mob Leader") then
-                                   FastTween(CFrame.new(-2891, 7, 5316))
+                                   FastTween(CFrame.new(-2878, 8, 5445))
                               end
                          elseif game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ProQuestProgress","RichSon") == 1 then
                               if game.Players.LocalPlayer.Backpack:FindFirstChild("Relic") then
@@ -1227,7 +1211,7 @@ spawn(function()
                                    task.wait(1)
                               else
                                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ProQuestProgress","RichSon")
-                                   end
+                              end
                          else
                               game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ProQuestProgress","RichSon")
                          end
@@ -1539,6 +1523,13 @@ Tabs.Teleport:AddButton({
                     {
                          Title = "Yes!",
                          Callback = function()
+                              do
+                                   Fluent:Notify({
+                                        Title = "Notification",
+                                        Content = "TravelEastBlue.",
+                                        Duration = 2
+                                   })
+                              end
                               game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelMain")
                          end
                     },
@@ -1569,6 +1560,13 @@ Tabs.Teleport:AddButton({
                     {
                          Title = "Yes!",
                          Callback = function()
+                              do
+                                   Fluent:Notify({
+                                        Title = "Notification",
+                                        Content = "TravelDressrosa.",
+                                        Duration = 2
+                                   })
+                              end
                               game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelDressrosa")
                          end
                     },
@@ -1599,6 +1597,13 @@ Tabs.Teleport:AddButton({
                     {
                          Title = "Yes!",
                          Callback = function()
+                              do
+                                   Fluent:Notify({
+                                        Title = "Notification",
+                                        Content = "TravelZou.",
+                                        Duration = 2
+                                   })
+                              end
                               game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelZou")
                          end
                     },
@@ -1627,20 +1632,20 @@ if OldWorld then
 local islands = {"Pirate starter", "Marine starter", "Jungle", "Pirate Village", "Desert", "Frozen Village", "MarineFord", "Sky 1st Floor", "Prison", "Sky 2st Floor", "Sky 3st Floor"}
 
 function getCFrameForIsland(islandName)
-    local positions = {
-        ["Pirate starter"] = CFrame.new(1071.2832, 16.3085976, 1426.86792),
-        ["Marine starter"] = CFrame.new(-2573.3374, 6.88881969, 2046.99817),
-        ["Jungle"] = CFrame.new(-1249.77222, 11.8870859, 341.356476),
-        ["Pirate Village"] = CFrame.new(-1122.34998, 4.78708982, 3855.91992),
-        ["Desert"] = CFrame.new(1094.14587, 6.47350502, 4192.88721),
-        ["Frozen Village"] = CFrame.new(1198.00928, 27.0074959, -1211.73376),
-        ["MarineFord"] = CFrame.new(-4505.375, 20.687294, 4260.55908),
-        ["Sky 1st Floor"] = CFrame.new(-4970.21875, 717.707275, -2622.35449),
-        ["Prison"] = CFrame.new(4854.16455, 5.68742752, 740.194641),
-        ["Sky 2st Floor"] = CFrame.new(-4813.0249, 903.708557, -1912.69055),
-        ["Sky 3st Floor"] = CFrame.new(-7952.31006, 5545.52832, -320.704956)
-    }
-    return positions[islandName]
+     local positions = {
+          ["Pirate starter"] = CFrame.new(1071.2832, 16.3085976, 1426.86792),
+          ["Marine starter"] = CFrame.new(-2573.3374, 6.88881969, 2046.99817),
+          ["Jungle"] = CFrame.new(-1249.77222, 11.8870859, 341.356476),
+          ["Pirate Village"] = CFrame.new(-1122.34998, 4.78708982, 3855.91992),
+          ["Desert"] = CFrame.new(1094.14587, 6.47350502, 4192.88721),
+          ["Frozen Village"] = CFrame.new(1198.00928, 27.0074959, -1211.73376),
+          ["MarineFord"] = CFrame.new(-4505.375, 20.687294, 4260.55908),
+          ["Sky 1st Floor"] = CFrame.new(-4970.21875, 717.707275, -2622.35449),
+          ["Prison"] = CFrame.new(4854.16455, 5.68742752, 740.194641),
+          ["Sky 2st Floor"] = CFrame.new(-4813.0249, 903.708557, -1912.69055),
+          ["Sky 3st Floor"] = CFrame.new(-7952.31006, 5545.52832, -320.704956)
+     }
+     return positions[islandName]
 end
 function is(land)
      local targetCFrame = getCFrameForIsland(land)
